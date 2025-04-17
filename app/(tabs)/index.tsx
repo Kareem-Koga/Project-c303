@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import { View, StyleSheet,Image } from 'react-native';
 
 const PlaceholderImage = require('@/assets/images/icon.png');
