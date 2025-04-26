@@ -3,18 +3,6 @@ import { View, Text, Image, FlatList, StyleSheet } from "react-native";
 
 
 const products = [
-<<<<<<< HEAD
-  { id: "1", name: "T-shirt", description: "A stylish cotton T-shirt", price: "$300", image: require("../../assets/images/T-shirt.jpg") },
-  { id: "2", name: "Jeans", description: "Classic blue jeans", price: "$800", image: require("../../assets/images/jeans.jpg") },
-  { id: "3", name: "Sweater", description: "Warm wool sweater", price: "$700", image: require("../../assets/images/Sweater.jpg") },
-  { id: "4", name: "Coat", description: "Elegant winter coat", price: "$1000", image: require("../../assets/images/Coat.jpg") },
-];
-
-const ProductItem = ({ item }: { item: { id: string; name: string; description: string; price: string; image: any } }) => {
-  return (
-    <View style={styles.card}>
-      <Image source={item.image} style={styles.image} />
-=======
   { id: "1", name: "T-shirt", description: "A stylish cotton T-shirt", price: "$300", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSckVwuCvCzd4fqCdYLi8RjuzyEFPo7BZaKig&s" },
   { id: "2", name: "Jeans", description: "Classic blue jeans", price: "$300", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTy_N7RW_kORKB7roASGX9FfLOuIdhXxgR_aA&s" },
   { id: "3", name: "Sweater", description: "Warm wool sweater", price: "$400", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQySF06BuvuS4hAQSUD8ArPAHJeYmlqca2iOA&s" },
@@ -35,7 +23,6 @@ const ProductItem = ({ item }: { item: { id: string; name: string; description: 
         style={styles.productImage} 
         resizeMode="cover" // Or other resizeMode values
       />
->>>>>>> Hager
       <View style={styles.textContainer}>
         <Text style={styles.name}>{item.name || "Unnamed Product"}</Text>
         <Text style={styles.description}>
@@ -49,16 +36,6 @@ const ProductItem = ({ item }: { item: { id: string; name: string; description: 
 
 const Products = () => {
   return (
-<<<<<<< HEAD
-    <View style={styles.container}>
-      <FlatList
-        contentContainerStyle={styles.list}
-        data={products}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <ProductItem item={item} />}
-      />
-    </View>
-=======
     <FlatList
       data={products}
       keyExtractor={(item) => item.id}
@@ -67,7 +44,6 @@ const Products = () => {
       contentContainerStyle={styles.list}
       columnWrapperStyle={styles.row}
     />
->>>>>>> Hager
   );
 };
 
@@ -78,13 +54,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#F0F2F5", 
   },
   list: {
-<<<<<<< HEAD
-    padding: 20,
-=======
     paddingHorizontal: 10, 
     paddingTop: 20,
     backgroundColor: "#F5F5F5",
->>>>>>> Hager
   },
   row: {
     flexDirection: 'row',
