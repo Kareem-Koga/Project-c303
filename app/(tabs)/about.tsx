@@ -7,7 +7,7 @@ const teamMembers = [
   { name: 'الاء اسامه خليفه', id: '2227083', email: 'alaakhalifa2910@gmail.com', github: 'AlaaOsama-29' },
   { name: 'صلاح الدين اشرف حسن', id: '2127383', email: '', github: '' },
   { name: 'هاجر مجدى عامر', id: '2127242', email: 'hagermagdy380@gmail.com', github: 'hagermagdy380' },
-
+  {name: 'أحمد فؤاد عبدالرازق', id: '2027449', email: 'ahmedfouad2210@gmail.com', github: 'Ahmed-fouad2210' }
 ];
 
 export default function AboutScreen() {
