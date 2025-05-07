@@ -43,12 +43,7 @@ const Login = () => {
       } else {
         Alert.alert("Error", "User data not found.");
       }
-    } catch (error) {
-      Alert.alert("Login Failed", error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+    } 
 
   return (
     <View style={styles.container}>
