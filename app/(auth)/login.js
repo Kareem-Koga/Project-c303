@@ -14,36 +14,68 @@ const Login = () => {
   const router = useRouter();
 
   const handleLogin = async () => {
-    setLoading(true);
-    try {
-      const userCredential = await signInWithEmailAndPassword(Firebase_auth, email, password);
-      const user = userCredential.user;
-
-      if (!user.emailVerified) {
-      Alert.alert("Email Verification", "Please verify your email before logging in.");
-      return;
-      }
-    } catch (error) {
-      if (error.code === 'auth/user-not-found') {
-      Alert.alert("Login Failed", "User does not exist. Please check your email or sign up.");
-      } else if (error.code === 'auth/wrong-password') {
-      Alert.alert("Login Failed", "Incorrect password. Please try again.");
-      } else {
-      Alert.alert("Login Failed", error.message);
-      }
+    // Validate inputs
+    if (!email || !password) {
+      Alert.alert("Input Required", "Please enter both email and password");
       return;
     }
+    
+    setLoading(true);
+    console.log('Login attempt started:', email);
+    
+    try {
+      // Attempt to sign in
+      console.log('Attempting Firebase sign in');
+      const userCredential = await signInWithEmailAndPassword(Firebase_auth, email, password);
+      const user = userCredential.user;
+      console.log('Sign in successful, user:', user.uid);
 
-    const userDoc = await getDoc(doc(Firebase_db, "users", user.uid));
-      if (userDoc.exists()) {
-        const userData = userDoc.data(); // Keeping this for potential future use
-        // const userData = userDoc.data(); // Keeping this for potential future use
-        await AsyncStorage.setItem('userToken', user.uid); 
-        router.pop(); 
-      } else {
-        Alert.alert("Error", "User data not found.");
+      // Check email verification
+      if (!user.emailVerified) {
+        console.log('Email not verified');
+        Alert.alert("Email Verification", "Please verify your email before logging in.");
+        setLoading(false);
+        return;
       }
-    } 
+
+      // Fetch user data
+      console.log('Fetching user data from Firestore');
+      const userDoc = await getDoc(doc(Firebase_db, "users", user.uid));
+      
+      if (userDoc.exists()) {
+        console.log('User data found in Firestore');
+        // Store user token
+        await AsyncStorage.setItem('userToken', user.uid);
+        console.log('User token stored in AsyncStorage');
+        
+        // Reset loading state before navigation
+        setLoading(false);
+        
+        // Navigate to tabs instead of using pop()
+        console.log('Navigating to home screen');
+        router.replace('/(tabs)');
+      } else {
+        console.log('User document not found in Firestore');
+        setLoading(false);
+        Alert.alert("Error", "User data not found in database.");
+      }
+    } catch (error) {
+      console.log('Login error:', error.code, error.message);
+      setLoading(false);
+      // Handle specific error cases
+      if (error.code === 'auth/user-not-found') {
+        Alert.alert("Login Failed", "User does not exist. Please check your email or sign up.");
+      } else if (error.code === 'auth/wrong-password') {
+        Alert.alert("Login Failed", "Incorrect password. Please try again.");
+      } else if (error.code === 'auth/invalid-email') {
+        Alert.alert("Login Failed", "The email address is not valid.");
+      } else if (error.code === 'auth/too-many-requests') {
+        Alert.alert("Login Failed", "Too many unsuccessful login attempts. Please try again later.");
+      } else {
+        Alert.alert("Login Failed", error.message || "An unexpected error occurred.");
+      }
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -56,6 +88,9 @@ const Login = () => {
           placeholder="Email"
           placeholderTextColor="#888"
           onChangeText={(text) => setEmail(text)}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          testID="emailInput"
         />
       </View>
       <View style={styles.inputContainer}>
@@ -67,9 +102,14 @@ const Login = () => {
           placeholderTextColor="#888"
           secureTextEntry={true}
           onChangeText={(text) => setPassword(text)}
+          testID="passwordInput"
         />
       </View>
-      <Pressable style={styles.submitButton} onPress={handleLogin}>
+      <Pressable 
+        style={styles.submitButton} 
+        onPress={handleLogin}
+        testID="loginButton"
+      >
         {loading ? (
           <ActivityIndicator size="small" color="white" />
         ) : (

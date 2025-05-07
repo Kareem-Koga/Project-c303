@@ -9,10 +9,10 @@ const RedirectScreen = () => {
     <View style={styles.container}>
       <Text style={styles.title}>You are not logged in</Text>
       <Text style={styles.subtitle}>Please log in or register to continue</Text>
-      <Pressable style={styles.button} onPress={() => router.push('/login')}>
+      <Pressable style={styles.button} onPress={() => router.push('/(auth)/login')}>
         <Text style={styles.buttonText}>Login</Text>
       </Pressable>
-      <Pressable style={styles.button} onPress={() => router.push('/signup')}>
+      <Pressable style={styles.button} onPress={() => router.push('/(auth)/signup')}>
         <Text style={styles.buttonText}>Register</Text>
       </Pressable>
     </View>

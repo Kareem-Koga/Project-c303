@@ -44,15 +44,23 @@ const Signup = () => {
       // Save user data to Firestore
       await setDoc(doc(Firebase_db, "users", user.uid), {
         email,
-        phone,
-        username,
+        phoneNumber: phone,
+        displayName: username,
+        photoURL: null,
+        address: '',
+        userId: user.uid,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        notificationsEnabled: true,
+        language: 'English',
+        theme: 'System Default'
       });
 
       // Save user token to AsyncStorage
       await AsyncStorage.setItem("userToken", user.uid);
 
       Alert.alert("Success", "A verification email has been sent. Please verify your account.");
-      router.push("/profile"); // Redirect to the profile page
+      router.push("/(tabs)"); // Redirect to the tabs page instead of /profile
     } catch (error) {
       const errorCode = error.code;
       switch (errorCode) {
