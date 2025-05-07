@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, Text, View, ImageBackground } from 'react-native';
+import React, { useState }  from 'react';
+import { StyleSheet, Text, View, ImageBackground ,TextInput} from 'react-native';
 import { useRouter, SearchParams } from 'expo-router'; // Use expo-router for navigation
 import Products from "../../components/ProductItem"; // Import Products component
 import { useSearchParams } from 'expo-router/build/hooks';
@@ -13,18 +13,22 @@ const Home: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams(); 
   const username = searchParams.get('username'); 
+  const [searchQuery, setSearchQuery] = useState('');
 
   return (
     <ImageBackground
       source={{ uri: 'https://images.pexels.com/photos/3965545/pexels-photo-3965545.jpeg' }}
       style={styles.backgroundImage}
     >
-    
-      <Text style={{ color: 'black', fontSize: 24, marginBottom: 20 }}>
-        Search bar {username ? username : 'Guest'}
-      </Text>
+    <TextInput
+          style={styles.searchInput}
+          placeholder={`Search for ${username ? username : 'Guest'}`}
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          autoCapitalize="words"
+        />
       <ScrollView style={styles.overlay}>
-      <Products />
+      <Products searchQuery={searchQuery} />
       </ScrollView>
       
 
@@ -43,7 +47,17 @@ const styles = StyleSheet.create({
     padding: 20,
     width: "100%",
     borderRadius: 10,
-  }
+  },
+  searchInput: {
+    backgroundColor: 'white',
+    padding: 10,
+    width: '80%',
+    borderRadius: 10,
+    marginBottom: 20,
+    fontSize: 18,
+    textAlign: 'center',
+    color: 'black',
+  },
 });
 
 export default Home;

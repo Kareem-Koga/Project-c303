@@ -32,10 +32,13 @@ const ProductItem = ({ item }: { item: { id: string; name: string; description: 
   );
 };
 
-const Products = () => {
+const Products = ({ searchQuery }: { searchQuery: string }) => {
+  const filteredProducts = products.filter(product =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   return (
     <FlatList
-      data={products}
+    data={filteredProducts}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => <ProductItem item={item} />}
       numColumns={2}
