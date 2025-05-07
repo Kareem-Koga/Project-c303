@@ -22,7 +22,7 @@ const Home: React.FC = () => {
     >
     <TextInput
           style={styles.searchInput}
-          placeholder={`Search for ${username ? username : 'Guest'}`}
+          placeholder={`Search for ${username ? username : ''}`}
           value={searchQuery}
           onChangeText={setSearchQuery}
           autoCapitalize="words"
