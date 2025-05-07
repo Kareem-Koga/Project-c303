@@ -1,0 +1,1 @@
+//write the seacrh component in typescript

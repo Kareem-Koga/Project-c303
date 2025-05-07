@@ -1,32 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { View, TextInput, StyleSheet, Pressable, Text, ActivityIndicator } from 'react-native';
+import React, { useState } from 'react';
+import { View, TextInput, StyleSheet, Pressable, Text, ActivityIndicator, Alert } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Link } from 'expo-router';
-import { useNavigation } from "@react-navigation/native"; // Import navigation hook
+import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-import { firebase, Firebase_auth, Firebase_db } from "../../FirebaseConfig";
+import { Firebase_auth, Firebase_db } from "../FirebaseConfig";
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const navigation = useNavigation(); // Initialize navigation
-
-  useEffect(() => {
-    checkLoggedInStatus();
-  }, []);
-
-  const checkLoggedInStatus = async () => {
-    try {
-      const userToken = await AsyncStorage.getItem('userToken');
-      if (userToken) {
-        navigation.navigate("Home");
-      }
-    } catch (error) {
-      console.error('Error reading user token from AsyncStorage:', error);
-    }
-  };
+  const router = useRouter();
 
   const handleLogin = async () => {
     setLoading(true);
@@ -35,7 +20,7 @@ const Login = () => {
       const user = userCredential.user;
 
       if (!user.emailVerified) {
-        alert("Please verify your email before logging in.");
+        Alert.alert("Email Verification", "Please verify your email before logging in.");
         return;
       }
 
@@ -43,12 +28,13 @@ const Login = () => {
       const userDoc = await getDoc(doc(Firebase_db, "users", user.uid));
       if (userDoc.exists()) {
         const userData = userDoc.data();
-        navigation.navigate("Home", { username: userData.username }); // Pass username to Home
+        await AsyncStorage.setItem('userToken', user.uid); // Save token
+        router.push('/profile'); // Navigate to Profile
       } else {
-        alert("User data not found.");
+        Alert.alert("Error", "User data not found.");
       }
     } catch (error) {
-      alert("Login failed: " + error.message);
+      Alert.alert("Login Failed", error.message);
     } finally {
       setLoading(false);
     }
@@ -85,8 +71,15 @@ const Login = () => {
           <Text style={styles.submitText}>Login</Text>
         )}
       </Pressable>
+
+      <Pressable onPress={() => router.push('/forgot')} style={styles.forgotPasswordButton}>
+        <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+      </Pressable>
+
       <Text style={styles.signupText}>Don't have an account?</Text>
-      <Link href="/signup" style={styles.signupLink}>Sign Up</Link>
+      <Pressable onPress={() => router.push('/signup')}>
+        <Text style={styles.signupLink}>Sign Up</Text>
+      </Pressable>
     </View>
   );
 };
@@ -138,6 +131,15 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  forgotPasswordButton: {
+    marginTop: 15,
+  },
+  forgotPasswordText: {
+    color: "#4CAF50",
+    fontSize: 14,
+    fontWeight: "bold",
+    textDecorationLine: "underline",
   },
   signupText: {
     marginTop: 20,

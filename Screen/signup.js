@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { View, TextInput, StyleSheet, Pressable, Text, ActivityIndicator } from "react-native";
+import { View, TextInput, StyleSheet, Pressable, Text, ActivityIndicator, Alert } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
-import { Firebase_auth, Firebase_db } from "../../FirebaseConfig"; // Import the correct Firebase exports
+import { Firebase_auth, Firebase_db } from "../FirebaseConfig"; // Import the correct Firebase exports
 import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
+import AsyncStorage from "@react-native-async-storage/async-storage"; // Import AsyncStorage
 import { useRouter } from "expo-router"; // Import useRouter
 
 const Signup = () => {
@@ -32,22 +33,26 @@ const Signup = () => {
     try {
       // Create user with email and password
       const userCredential = await createUserWithEmailAndPassword(Firebase_auth, email, password);
+      const user = userCredential.user;
 
       // Send email verification
-      await sendEmailVerification(userCredential.user, {
+      await sendEmailVerification(user, {
         handleCodeInApp: true,
         url: "https://store-a7193.firebaseapp.com",
       });
 
       // Save user data to Firestore
-      await setDoc(doc(Firebase_db, "users", userCredential.user.uid), {
+      await setDoc(doc(Firebase_db, "users", user.uid), {
         email,
         phone,
         username,
       });
 
-      alert("A verification email has been sent. Please verify your account.");
-      router.push("/login"); // Redirect to the login page
+      // Save user token to AsyncStorage
+      await AsyncStorage.setItem("userToken", user.uid);
+
+      Alert.alert("Success", "A verification email has been sent. Please verify your account.");
+      router.push("/profile"); // Redirect to the profile page
     } catch (error) {
       const errorCode = error.code;
       switch (errorCode) {
