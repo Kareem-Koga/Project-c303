@@ -1,43 +1,45 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
+import React from 'react';
+import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ProfileScreen = () => {
   const router = useRouter();
-  const [loading, setLoading] = useState(true); // State to track loading
-
-  useEffect(() => {
-    const checkUserAuthentication = async () => {
-      try {
-        const userToken = await AsyncStorage.getItem('userToken'); // Check if user token exists
-        if (!userToken) {
-          router.replace('/login'); // Redirect to login if not authenticated
-        }
-      } catch (error) {
-        console.error('Error checking user authentication:', error);
-      } finally {
-        setLoading(false); // Stop loading once the check is complete
-      }
-    };
-
-    checkUserAuthentication();
-  }, [router]);
-
-  if (loading) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#4CAF50" />
-      </View>
-    );
-  }
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Welcome to your Profile!</Text>
-      {/* TODO: Add user profile details here */}
+    <View style={styles.container}>
+      <Text style={styles.title}>Profile Screen</Text>
+      <Pressable style={styles.button} onPress={() => router.push('/login')}>
+        <Text style={styles.buttonText}>Go to Login</Text>
+      </Pressable>
     </View>
-  );
+  ); 
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5F5F5',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#4CAF50',
+    marginBottom: 20,
+  },
+  button: {
+    backgroundColor: '#4CAF50',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+});
 
 export default ProfileScreen;

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, TextInput, StyleSheet, Pressable, Text, ActivityIndicator, Alert } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
-import { Firebase_auth, Firebase_db } from "../FirebaseConfig"; // Import the correct Firebase exports
+import { Firebase_auth, Firebase_db } from "../../FirebaseConfig"; // Import the correct Firebase exports
 import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage"; // Import AsyncStorage

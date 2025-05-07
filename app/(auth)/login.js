@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
+import { useState } from 'react'; // React is used for JSX
 import { View, TextInput, StyleSheet, Pressable, Text, ActivityIndicator, Alert } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons'; // MaterialIcons is used in the input fields
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-import { Firebase_auth, Firebase_db } from "../FirebaseConfig";
+import { Firebase_auth, Firebase_db } from "../../FirebaseConfig";
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState(''); // setEmail is used in onChangeText
+  const [password, setPassword] = useState(''); // setPassword is used in onChangeText
+  const [loading, setLoading] = useState(false); // loading is used in the ActivityIndicator
   const router = useRouter();
 
   const handleLogin = async () => {
@@ -20,16 +20,26 @@ const Login = () => {
       const user = userCredential.user;
 
       if (!user.emailVerified) {
-        Alert.alert("Email Verification", "Please verify your email before logging in.");
-        return;
+      Alert.alert("Email Verification", "Please verify your email before logging in.");
+      return;
       }
+    } catch (error) {
+      if (error.code === 'auth/user-not-found') {
+      Alert.alert("Login Failed", "User does not exist. Please check your email or sign up.");
+      } else if (error.code === 'auth/wrong-password') {
+      Alert.alert("Login Failed", "Incorrect password. Please try again.");
+      } else {
+      Alert.alert("Login Failed", error.message);
+      }
+      return;
+    }
 
-      // Fetch user data from Firestore
-      const userDoc = await getDoc(doc(Firebase_db, "users", user.uid));
+    const userDoc = await getDoc(doc(Firebase_db, "users", user.uid));
       if (userDoc.exists()) {
-        const userData = userDoc.data();
-        await AsyncStorage.setItem('userToken', user.uid); // Save token
-        router.push('/profile'); // Navigate to Profile
+        const userData = userDoc.data(); // Keeping this for potential future use
+        // const userData = userDoc.data(); // Keeping this for potential future use
+        await AsyncStorage.setItem('userToken', user.uid); 
+        router.pop(); 
       } else {
         Alert.alert("Error", "User data not found.");
       }
