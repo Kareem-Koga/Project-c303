@@ -137,12 +137,12 @@ const ProfileScreen = () => {
 
   const handleEditProfile = () => {
     // Navigate to a new edit profile screen
-    router.push('/(tabs)/editProfile');
+    router.push('../Screen/editProfile');
   };
 
   const handlePersonalInfo = () => {
     // Navigate to the personal information screen
-    router.push('/(tabs)/personalInfo');
+    router.push('../Screen/personalInfo');
   };
 
   const ProfileHeader = () => (
