@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, FlatList, StyleSheet } from "react-native";
+import { View, Text, Image, FlatList, StyleSheet, Dimensions } from "react-native";
 
 
 const products = [
@@ -11,13 +11,15 @@ const products = [
   { id: "6", name: "Hat", description: "Stylish winter hat", price: "$100", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUSMs77L6U6Sf1iybQw_mdMuTz6MdW4WSzrw&s" },
 ];
 
-const cardWidth = 200;
-const cardHeight = 300;
-const cardMarginHorizontal = 5;
+const { width: screenWidth } = Dimensions.get('window');
+const cardMarginHorizontal = 10;
+const numColumns = 2;
+const cardWidth = (screenWidth - (cardMarginHorizontal * 2) - (10 * (numColumns - 1))) / numColumns;
+const cardHeight = cardWidth * 1.5; 
 
 const ProductItem = ({ item }: { item: { id: string; name: string; description: string; price: string; image: string } }) => {
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, { width: cardWidth, height: cardHeight }]}>
       <Image 
         source={{ uri: item.image }} 
         style={styles.productImage} 
@@ -32,18 +34,16 @@ const ProductItem = ({ item }: { item: { id: string; name: string; description: 
   );
 };
 
-const Products = ({ searchQuery }: { searchQuery: string }) => {
-  const filteredProducts = products.filter(product =>
-    product.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+const Products = () => {
   return (
     <FlatList
-    data={filteredProducts}
-      keyExtractor={(item) => item.id}
-      renderItem={({ item }) => <ProductItem item={item} />}
+      data={products}
+      keyExtractor={(item: { id: any; }) => item.id}
+      renderItem={({ item }: { item: { id: string; name: string; description: string; price: string; image: string } }) => <ProductItem item={item} />}
       numColumns={2}
       contentContainerStyle={styles.list}
       columnWrapperStyle={styles.row}
+      ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
     />
   );
 };
