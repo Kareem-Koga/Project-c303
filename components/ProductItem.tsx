@@ -1,6 +1,6 @@
 import React from "react";
-import { View, Text, Image, FlatList, StyleSheet } from "react-native";
-
+import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import { useRouter } from "expo-router";
 
 const products = [
   { id: "1", name: "T-shirt", description: "A stylish cotton T-shirt", price: "$300", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSckVwuCvCzd4fqCdYLi8RjuzyEFPo7BZaKig&s" },
@@ -16,19 +16,24 @@ const cardHeight = 300;
 const cardMarginHorizontal = 5;
 
 const ProductItem = ({ item }: { item: { id: string; name: string; description: string; price: string; image: string } }) => {
+  const router = useRouter();
+
   return (
-    <View style={styles.card}>
+    <TouchableOpacity 
+      style={styles.card}
+      onPress={() => router.push(`/product/${item.id}`)}
+    >
       <Image 
         source={{ uri: item.image }} 
         style={styles.productImage} 
-        resizeMode="cover" // Or other resizeMode values
+        resizeMode="cover"
       />
       <View style={styles.textContainer}>
         <Text style={styles.name}>{item.name}</Text>
         <Text style={styles.description}>{item.description}</Text>
         <Text style={styles.price}>{item.price}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
