@@ -1,6 +1,6 @@
 import React from "react";
-import { View, Text, Image, FlatList, StyleSheet, Dimensions } from "react-native";
-
+import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity ,Dimensions} from "react-native";
+import { useRouter } from "expo-router";
 
 const products = [
   { id: "1", name: "T-shirt", description: "A stylish cotton T-shirt", price: "$300", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSckVwuCvCzd4fqCdYLi8RjuzyEFPo7BZaKig&s" },
@@ -12,15 +12,17 @@ const products = [
 ];
 
 const { width: screenWidth } = Dimensions.get('window');
-const estimatedCardWidth = 180;
-const numColumns = Math.max(Math.floor(screenWidth / estimatedCardWidth), 1); // دايماً عمود واحد على الأقل
 const cardMarginHorizontal = 10;
+const numColumns = 2;
 const cardWidth = (screenWidth - (cardMarginHorizontal * 2) - (10 * (numColumns - 1))) / numColumns;
-const cardHeight = cardWidth * 3;
+const cardHeight = cardWidth * 1.5; 
 
 const ProductItem = ({ item }: { item: { id: string; name: string; description: string; price: string; image: string } }) => {
   return (
-    <View style={[styles.card, { width: cardWidth, height: cardHeight, marginHorizontal: cardMarginHorizontal / 2 }]}>
+    <TouchableOpacity 
+      style={[styles.card, { width: cardWidth, height: cardHeight }]}
+      onPress={() => router.push({ pathname: '/product/[id]', params: { id: item.id } })}
+    >
       <Image 
         source={{ uri: item.image }} 
         style={styles.productImage} 
@@ -35,16 +37,19 @@ const ProductItem = ({ item }: { item: { id: string; name: string; description: 
   );
 };
 
-const Products = () => {
+const Products = ({ searchQuery }: { searchQuery: string }) => {
+  const filteredProducts = products.filter(product =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   return (
     <FlatList
       data={products}
-      keyExtractor={(item) => item.id}
-      renderItem={({ item }) => <ProductItem item={item} />}
+      keyExtractor={(item: { id: any; }) => item.id}
+      renderItem={({ item }: { item: { id: string; name: string; description: string; price: string; image: string } }) => <ProductItem item={item} />}
       numColumns={2}
       contentContainerStyle={styles.list}
       columnWrapperStyle={styles.row}
-      //ISeparatorComponent={() => <View style={{ width: 10 }} />}
+      ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
     />
   );
 };
