@@ -18,6 +18,8 @@ const cardWidth = (screenWidth - (cardMarginHorizontal * 2) - (10 * (numColumns 
 const cardHeight = cardWidth * 1.5; 
 
 const ProductItem = ({ item }: { item: { id: string; name: string; description: string; price: string; image: string } }) => {
+  const router = useRouter();
+
   return (
     <TouchableOpacity 
       style={[styles.card, { width: cardWidth, height: cardHeight }]}
@@ -26,14 +28,14 @@ const ProductItem = ({ item }: { item: { id: string; name: string; description: 
       <Image 
         source={{ uri: item.image }} 
         style={styles.productImage} 
-        resizeMode="cover" // Or other resizeMode values
+        resizeMode="cover"
       />
       <View style={styles.textContainer}>
         <Text style={styles.name}>{item.name}</Text>
         <Text style={styles.description}>{item.description}</Text>
         <Text style={styles.price}>{item.price}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -57,7 +59,7 @@ const Products = ({ searchQuery }: { searchQuery: string }) => {
 
 const styles = StyleSheet.create({
   list: {
-    paddingHorizontal: cardMarginHorizontal / 2,
+    paddingHorizontal: 10, 
     paddingTop: 20,
     backgroundColor: "#F5F5F5",
   },
@@ -69,19 +71,19 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "#FFF",
     borderRadius: 8,
-    padding: 60,
-    marginBottom: 5,
+    padding: 19,
+    width: cardWidth, 
+    height: cardHeight,
+    marginBottom: 15,
     shadowColor: "#000",
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.1,
     shadowRadius: 5,
-    elevation: 9,
-    flexGrow: 1,
+    elevation: 3,
   },
   productImage: {
     width: '100%',
-    height: '85%',
-    marginBottom: 15,
-    marginTop: 1,
+    height: 150, 
+    marginBottom: 10,
     borderRadius: 8,
 },
   textContainer: {
@@ -90,7 +92,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#8",
+    color: "#4CAF50",
   },
   description: {
     fontSize: 14,
@@ -100,7 +102,7 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#8",
+    color: "#007BFF",
     marginTop: 5,
   },
 });
