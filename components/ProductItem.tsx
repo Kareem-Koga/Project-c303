@@ -1,6 +1,6 @@
 import React from "react";
-import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity ,Dimensions} from "react-native";
-import { useRouter } from "expo-router";
+import { View, Text, Image, FlatList, StyleSheet, Dimensions } from "react-native";
+
 
 const products = [
   { id: "1", name: "T-shirt", description: "A stylish cotton T-shirt", price: "$300", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSckVwuCvCzd4fqCdYLi8RjuzyEFPo7BZaKig&s" },
@@ -12,30 +12,26 @@ const products = [
 ];
 
 const { width: screenWidth } = Dimensions.get('window');
+const estimatedCardWidth = 180;
+const numColumns = Math.max(Math.floor(screenWidth / estimatedCardWidth), 1); // دايماً عمود واحد على الأقل
 const cardMarginHorizontal = 10;
-const numColumns = 2;
 const cardWidth = (screenWidth - (cardMarginHorizontal * 2) - (10 * (numColumns - 1))) / numColumns;
-const cardHeight = cardWidth * 1.5; 
+const cardHeight = cardWidth * 3;
 
 const ProductItem = ({ item }: { item: { id: string; name: string; description: string; price: string; image: string } }) => {
-  const router = useRouter();
-
   return (
-    <TouchableOpacity 
-      style={[styles.card, { width: cardWidth, height: cardHeight }]}
-      onPress={() => router.push({ pathname: '/product/[id]', params: { id: item.id } })}
-    >
+    <View style={[styles.card, { width: cardWidth, height: cardHeight, marginHorizontal: cardMarginHorizontal / 2 }]}>
       <Image 
         source={{ uri: item.image }} 
         style={styles.productImage} 
-        resizeMode="cover"
+        resizeMode="cover" // Or other resizeMode values
       />
       <View style={styles.textContainer}>
         <Text style={styles.name}>{item.name}</Text>
         <Text style={styles.description}>{item.description}</Text>
         <Text style={styles.price}>{item.price}</Text>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 
@@ -43,12 +39,12 @@ const Products = () => {
   return (
     <FlatList
       data={products}
-      keyExtractor={(item: { id: any; }) => item.id}
-      renderItem={({ item }: { item: { id: string; name: string; description: string; price: string; image: string } }) => <ProductItem item={item} />}
+      keyExtractor={(item) => item.id}
+      renderItem={({ item }) => <ProductItem item={item} />}
       numColumns={2}
       contentContainerStyle={styles.list}
       columnWrapperStyle={styles.row}
-      ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
+      //ISeparatorComponent={() => <View style={{ width: 10 }} />}
     />
   );
 };
@@ -56,7 +52,7 @@ const Products = () => {
 
 const styles = StyleSheet.create({
   list: {
-    paddingHorizontal: 10, 
+    paddingHorizontal: cardMarginHorizontal / 2,
     paddingTop: 20,
     backgroundColor: "#F5F5F5",
   },
@@ -68,19 +64,19 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "#FFF",
     borderRadius: 8,
-    padding: 19,
-    width: cardWidth, 
-    height: cardHeight,
-    marginBottom: 15,
+    padding: 60,
+    marginBottom: 5,
     shadowColor: "#000",
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.3,
     shadowRadius: 5,
-    elevation: 3,
+    elevation: 9,
+    flexGrow: 1,
   },
   productImage: {
     width: '100%',
-    height: 150, 
-    marginBottom: 10,
+    height: '85%',
+    marginBottom: 15,
+    marginTop: 1,
     borderRadius: 8,
 },
   textContainer: {
@@ -89,7 +85,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#4CAF50",
+    color: "#8",
   },
   description: {
     fontSize: 14,
@@ -99,7 +95,7 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#007BFF",
+    color: "#8",
     marginTop: 5,
   },
 });
