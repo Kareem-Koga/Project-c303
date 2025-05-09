@@ -16,7 +16,7 @@ interface CartItem {
   id: string;
   name: string;
   description: string;
-  price: string;
+  price: string; 
   image: string;
   size: string;
   quantity: number;
@@ -34,7 +34,11 @@ export default function CartScreen() {
     try {
       const cartData = await AsyncStorage.getItem('cart');
       if (cartData) {
-        setCartItems(JSON.parse(cartData));
+        const parsedCart = JSON.parse(cartData).map((item: CartItem) => ({
+          ...item,
+          price: parseFloat(item.price), 
+        }));
+        setCartItems(parsedCart);
       }
     } catch (error) {
       console.error('Error loading cart:', error);
@@ -76,8 +80,7 @@ export default function CartScreen() {
 
   const calculateTotal = () => {
     return cartItems.reduce((total, item) => {
-      const price = parseFloat(item.price.replace('$', ''));
-      return total + price * item.quantity;
+      return total + parseFloat(item.price) * item.quantity;
     }, 0);
   };
 

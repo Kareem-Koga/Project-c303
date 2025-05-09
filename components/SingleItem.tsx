@@ -1,9 +1,11 @@
 // app/product.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { doc, getDoc } from 'firebase/firestore';
+import { Firebase_db as db } from '../FirebaseConfig'; // Import Firestore
 
 interface Product {
   id: string;
@@ -18,25 +20,42 @@ interface CartItem extends Product {
   quantity: number;
 }
 
-const products: Product[] = [
-  { id: "1", name: "T-shirt", description: "A stylish cotton T-shirt", price: "$300", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSckVwuCvCzd4fqCdYLi8RjuzyEFPo7BZaKig&s" },
-  { id: "2", name: "Jeans", description: "Classic blue jeans", price: "$300", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTy_N7RW_kORKB7roASGX9FfLOuIdhXxgR_aA&s" },
-  { id: "3", name: "Sweater", description: "Warm wool sweater", price: "$400", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQySF06BuvuS4hAQSUD8ArPAHJeYmlqca2iOA&s" },
-  { id: "4", name: "Coat", description: "Elegant winter coat", price: "$500", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR34eXouaySm-ptP06EEpVmfqMyS-NYihFPlw&s" },
-  { id: "5", name: "Socks", description: "Comfortable cotton socks", price: "$50", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIPPV4mm5fM8agRyZgTUluuQ3gxpTzrUWsbA&s" },
-  { id: "6", name: "Hat", description: "Stylish winter hat", price: "$100", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUSMs77L6U6Sf1iybQw_mdMuTz6MdW4WSzrw&s" },
-];
-
 const ProductScreen: React.FC = () => {
   const router = useRouter();
-  const { id } = useLocalSearchParams();
+  const { id } = useLocalSearchParams(); // Get the product ID from the route
+  const [product, setProduct] = useState<Product | null>(null);
   const [selectedSize, setSelectedSize] = useState('S');
-  const product = products.find(p => p.id === id);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        if (!id) {
+          Alert.alert('Error', 'Product ID is missing');
+          router.back();
+          return;
+        }
+
+        const productDoc = await getDoc(doc(db, 'products', id as string));
+        if (productDoc.exists()) {
+          setProduct({ id: productDoc.id, ...productDoc.data() } as Product);
+        } else {
+          Alert.alert('Error', 'Product not found');
+          router.back();
+        }
+      } catch (error) {
+        console.error('Error fetching product:', error);
+        Alert.alert('Error', 'Failed to fetch product details');
+        router.back();
+      }
+    };
+
+    fetchProduct();
+  }, [id]);
 
   if (!product) {
     return (
       <View style={styles.container}>
-        <Text>Product not found</Text>
+        <Text>Loading...</Text>
       </View>
     );
   }
@@ -51,11 +70,11 @@ const ProductScreen: React.FC = () => {
       const cartItem: CartItem = {
         ...product,
         size: selectedSize,
-        quantity: 1
+        quantity: 1,
       };
 
       const existingItemIndex = cart.findIndex(
-        item => item.id === product.id && item.size === selectedSize
+        (item) => item.id === product.id && item.size === selectedSize
       );
 
       if (existingItemIndex >= 0) {

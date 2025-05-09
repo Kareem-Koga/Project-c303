@@ -1,49 +1,65 @@
-import React from "react";
-import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
 import { useRouter } from "expo-router";
+import { collection, getDocs } from "firebase/firestore";
+import { Firebase_db as db } from "../FirebaseConfig";
 
-const products = [
-  { id: "1", name: "T-shirt", description: "A stylish cotton T-shirt", price: "$300", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSckVwuCvCzd4fqCdYLi8RjuzyEFPo7BZaKig&s" },
-  { id: "2", name: "Jeans", description: "Classic blue jeans", price: "$300", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTy_N7RW_kORKB7roASGX9FfLOuIdhXxgR_aA&s" },
-  { id: "3", name: "Sweater", description: "Warm wool sweater", price: "$400", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQySF06BuvuS4hAQSUD8ArPAHJeYmlqca2iOA&s" },
-  { id: "4", name: "Coat", description: "Elegant winter coat", price: "$500", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR34eXouaySm-ptP06EEpVmfqMyS-NYihFPlw&s" },
-  { id: "5", name: "Socks", description: "Comfortable cotton socks", price: "$50", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIPPV4mm5fM8agRyZgTUluuQ3gxpTzrUWsbA&s" },
-  { id: "6", name: "Hat", description: "Stylish winter hat", price: "$100", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUSMs77L6U6Sf1iybQw_mdMuTz6MdW4WSzrw&s" },
-];
-
-const cardWidth = 200;
-const cardHeight = 300;
-const cardMarginHorizontal = 5;
+const { width } = Dimensions.get("window");
+const cardWidth = width / 2 - 20;
+const cardHeight = cardWidth * 1.5;
 
 const ProductItem = ({ item }: { item: { id: string; name: string; description: string; price: string; image: string } }) => {
   const router = useRouter();
 
   return (
-    <TouchableOpacity 
+  <TouchableOpacity 
       style={styles.card}
       onPress={() => router.push(`/product/${item.id}`)}
     >
-      <Image 
-        source={{ uri: item.image }} 
-        style={styles.productImage} 
-        resizeMode="cover"
+      <Image
+      source={{ uri: item.image }}
+      style={styles.productImage}
+      resizeMode="cover"
       />
       <View style={styles.textContainer}>
-        <Text style={styles.name}>{item.name}</Text>
-        <Text style={styles.description}>{item.description}</Text>
-        <Text style={styles.price}>{item.price}</Text>
+      <Text style={styles.name}>{item.name}</Text>
+      <Text style={styles.description}>{item.description}</Text>
+      <Text style={styles.price}>${item.price}</Text>
       </View>
     </TouchableOpacity>
   );
 };
 
 const Products = ({ searchQuery }: { searchQuery: string }) => {
-  const filteredProducts = products.filter(product =>
-    product.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const [products, setProducts] = useState<{ id: string; name: string; description: string; price: string; image: string }[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const productSnapshot = await getDocs(collection(db, "products"));
+        const productList = productSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          name: doc.data().title, // Map Firestore's title to name
+          description: doc.data().description,
+          price: String(doc.data().price), // Ensure price is a string
+          image: doc.data().image,
+        }));
+        setProducts(productList);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const filteredProducts = products.filter((product) =>
+    product.name?.toLowerCase().includes(searchQuery?.toLowerCase() || "")
   );
+
   return (
     <FlatList
-    data={filteredProducts}
+      data={filteredProducts}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => <ProductItem item={item} />}
       numColumns={2}
@@ -53,23 +69,22 @@ const Products = ({ searchQuery }: { searchQuery: string }) => {
   );
 };
 
-
 const styles = StyleSheet.create({
   list: {
-    paddingHorizontal: 10, 
+    paddingHorizontal: 10,
     paddingTop: 20,
     backgroundColor: "#F5F5F5",
   },
   row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between', 
-    marginBottom: 15, 
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 15,
   },
   card: {
     backgroundColor: "#FFF",
     borderRadius: 8,
     padding: 19,
-    width: cardWidth, 
+    width: cardWidth,
     height: cardHeight,
     marginBottom: 15,
     shadowColor: "#000",
@@ -78,11 +93,11 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   productImage: {
-    width: '100%',
-    height: 150, 
+    width: "100%",
+    height: 150,
     marginBottom: 10,
     borderRadius: 8,
-},
+  },
   textContainer: {
     flex: 1,
   },
