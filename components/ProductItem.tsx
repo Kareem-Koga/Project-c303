@@ -9,8 +9,6 @@ const cardWidth = width / 2 - 20;
 const cardHeight = cardWidth * 1.5;
 
 const ProductItem = ({ item }: { item: { id: string; name: string; description: string; price: string; image: string } }) => {
-  const router = useRouter();
-
   return (
   <TouchableOpacity 
       style={styles.card}
@@ -26,7 +24,7 @@ const ProductItem = ({ item }: { item: { id: string; name: string; description: 
       <Text style={styles.description}>{item.description}</Text>
       <Text style={styles.price}>${item.price}</Text>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 
@@ -65,6 +63,7 @@ const Products = ({ searchQuery }: { searchQuery: string }) => {
       numColumns={2}
       contentContainerStyle={styles.list}
       columnWrapperStyle={styles.row}
+      ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
     />
   );
 };
@@ -88,9 +87,10 @@ const styles = StyleSheet.create({
     height: cardHeight,
     marginBottom: 15,
     shadowColor: "#000",
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.3,
     shadowRadius: 5,
-    elevation: 3,
+    elevation: 9,
+    flexGrow: 1,
   },
   productImage: {
     width: "100%",
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#4CAF50",
+    color: "#8",
   },
   description: {
     fontSize: 14,
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#007BFF",
+    color: "#8",
     marginTop: 5,
   },
 });

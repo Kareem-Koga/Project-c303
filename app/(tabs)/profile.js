@@ -233,7 +233,7 @@ const ProfileScreen = () => {
         updatedAt: new Date(),
       });
 
-      // حدث الصورة في الواجهة
+      
       setUserData({ ...userData, photoURL: imageUrl });
     } else {
       Alert.alert("No Image Selected", "لم يتم اختيار صورة.");
