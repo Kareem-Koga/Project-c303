@@ -19,10 +19,7 @@ const cardHeight = cardWidth * 1.5;
 
 const ProductItem = ({ item }: { item: { id: string; name: string; description: string; price: string; image: string } }) => {
   return (
-    <TouchableOpacity 
-      style={[styles.card, { width: cardWidth, height: cardHeight }]}
-      onPress={() => router.push({ pathname: '/product/[id]', params: { id: item.id } })}
-    >
+    <View style={[styles.card, { width: cardWidth, height: cardHeight, marginHorizontal: cardMarginHorizontal / 2 }]}>
       <Image 
         source={{ uri: item.image }} 
         style={styles.productImage} 
