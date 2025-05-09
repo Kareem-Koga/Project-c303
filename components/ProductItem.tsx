@@ -9,6 +9,8 @@ const cardWidth = width / 2 - 20;
 const cardHeight = cardWidth * 1.5;
 
 const ProductItem = ({ item }: { item: { id: string; name: string; description: string; price: string; image: string } }) => {
+  const router = useRouter();
+
   return (
   <TouchableOpacity 
       style={styles.card}
@@ -24,7 +26,7 @@ const ProductItem = ({ item }: { item: { id: string; name: string; description: 
       <Text style={styles.description}>{item.description}</Text>
       <Text style={styles.price}>${item.price}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -87,10 +89,9 @@ const styles = StyleSheet.create({
     height: cardHeight,
     marginBottom: 15,
     shadowColor: "#000",
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.1,
     shadowRadius: 5,
-    elevation: 9,
-    flexGrow: 1,
+    elevation: 3,
   },
   productImage: {
     width: "100%",
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#8",
+    color: "#4CAF50",
   },
   description: {
     fontSize: 14,
@@ -114,7 +115,7 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#8",
+    color: "#007BFF",
     marginTop: 5,
   },
 });
