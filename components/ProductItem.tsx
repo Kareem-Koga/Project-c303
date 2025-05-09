@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity ,Dimensions} from "react-native";
 import { useRouter } from "expo-router";
 
 const products = [
