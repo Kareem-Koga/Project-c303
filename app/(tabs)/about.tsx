@@ -5,7 +5,7 @@ const teamMembers = [
   { name: 'كريم محمد قرنى امين', id: '2027064', email: 'kimotheone168@gmai.com ', github: 'Kareem-Koga' },
   { name: 'فاطمه الزهراء على', id: '2127241', email: 'fatmaali8053@gmail.com', github: 'FatmaEl-zahraaali' },
   { name: 'الاء اسامه خليفه', id: '2227083', email: 'alaakhalifa2910@gmail.com', github: 'AlaaOsama-29' },
-  { name: 'صلاح الدين اشرف حسن', id: '2127383', email: '', github: '' },
+  { name: 'صلاح الدين اشرف حسن', id: '2127383', email: 'salahalkashif11@gmail.com', github: 'salahalkashif' },
   { name: 'هاجر مجدى عامر', id: '2127242', email: 'hagermagdy380@gmail.com', github: 'hagermagdy380' },
 
 ];

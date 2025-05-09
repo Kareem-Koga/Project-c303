@@ -10,57 +10,59 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// نوع المنتج
 type Product = {
   id: string;
   name: string;
-  price: number;
+  price: number; // Ensure price is a number
   image: string;
+  size: string; // Added size field
   quantity?: number;
 };
 
-// منتج تجريبي
-
-const TestProduct: React.FC = () => {
+const AddToCart: React.FC<{ product: Product }> = ({ product }) => {
   const [loading, setLoading] = useState<boolean>(false);
 
-  const addToCart = async (product: Product) => {
+  const addToCart = async () => {
     setLoading(true);
     try {
       const cartData = await AsyncStorage.getItem('cart');
       let cart: Product[] = cartData ? JSON.parse(cartData) : [];
 
-      const index = cart.findIndex((item) => item.id === product.id);
-      if (index >= 0) {
-        cart[index].quantity = (cart[index].quantity || 1) + 1;
+      const existingItemIndex = cart.findIndex(
+        (item) => item.id === product.id && item.size === product.size
+      );
+
+      if (existingItemIndex >= 0) {
+        cart[existingItemIndex].quantity = (cart[existingItemIndex].quantity || 1) + 1;
       } else {
         cart.push({ ...product, quantity: 1 });
       }
 
       await AsyncStorage.setItem('cart', JSON.stringify(cart));
-      Alert.alert('✅ تمت الإضافة', 'تمت إضافة المنتج إلى العربة 🛒');
+      Alert.alert('✅ Success', 'Item added to cart 🛒');
     } catch (error) {
       console.error('Error adding to cart:', error);
-      Alert.alert('❌ خطأ', 'حدث خطأ أثناء الإضافة');
+      Alert.alert('❌ Error', 'Failed to add item to cart');
     }
     setLoading(false);
   };
 
   return (
     <View style={styles.container}>
-      <Image source={{ uri: dummyProduct.image }} style={styles.image} />
-      <Text style={styles.name}>{dummyProduct.name}</Text>
-      <Text style={styles.price}>{dummyProduct.price} جنيه</Text>
+      <Image source={{ uri: product.image }} style={styles.image} />
+      <Text style={styles.name}>{product.name}</Text>
+      <Text style={styles.price}>{product.price.toFixed(2)} USD</Text> {/* Fixed price formatting */}
+      <Text style={styles.size}>Size: {product.size}</Text>
       {loading ? (
         <ActivityIndicator size="small" color="#000" />
       ) : (
-        <Button title="أضف إلى العربة" onPress={() => addToCart(dummyProduct)} />
+        <Button title="Add to Cart" onPress={addToCart} />
       )}
     </View>
   );
 };
 
-export default TestProduct;
+export default AddToCart;
 
 const styles = StyleSheet.create({
   container: {
@@ -82,5 +84,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'green',
     marginVertical: 10,
+  },
+  size: {
+    fontSize: 16,
+    color: '#555',
+    marginBottom: 10,
   },
 });
