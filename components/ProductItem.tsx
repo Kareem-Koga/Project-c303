@@ -23,7 +23,7 @@ const ProductItem = ({ item }: { item: { id: string; name: string; description: 
   return (
     <TouchableOpacity 
       style={[styles.card, { width: cardWidth, height: cardHeight }]}
-      onPress={() => router.push(`/product/${item.id}`)}
+      onPress={() => router.push({ pathname: '/product/[id]', params: { id: item.id } })}
     >
       <Image 
         source={{ uri: item.image }} 
