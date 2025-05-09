@@ -1,9 +1,5 @@
 // app/product.tsx
-<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
-=======
-import React, { useState } from 'react';
->>>>>>> e71ecc02360a42a2f65bdd87d77adee204f0ed6e
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -29,7 +25,6 @@ const ProductScreen: React.FC = () => {
   const { id } = useLocalSearchParams(); // Get the product ID from the route
   const [product, setProduct] = useState<Product | null>(null);
   const [selectedSize, setSelectedSize] = useState('S');
-<<<<<<< HEAD
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -56,9 +51,6 @@ const ProductScreen: React.FC = () => {
 
     fetchProduct();
   }, [id]);
-=======
-  const product = products.find(p => p.id === id);
->>>>>>> e71ecc02360a42a2f65bdd87d77adee204f0ed6e
 
   if (!product) {
     return (
