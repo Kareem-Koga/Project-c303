@@ -5,12 +5,10 @@ import { collection, getDocs } from "firebase/firestore";
 import { Firebase_db as db } from "../FirebaseConfig";
 
 const { width: screenWidth } = Dimensions.get('window');
-const estimatedCardWidth = 180;
 const numColumns = 2;
 const cardMarginHorizontal = 10;
 const cardWidth = (screenWidth - (cardMarginHorizontal * 2) - (10 * (numColumns - 1))) / numColumns;
-const cardHeight = cardWidth * 1.6;
-
+const cardHeight = cardWidth * 1.5;
 
 const ProductItem = ({ item }: { item: { id: string; name: string; description: string; price: string; image: string } }) => {
   const router = useRouter();
@@ -23,12 +21,12 @@ const ProductItem = ({ item }: { item: { id: string; name: string; description: 
       <Image 
         source={{ uri: item.image }} 
         style={styles.productImage} 
-        resizeMode="cover" // Or other resizeMode values
+        resizeMode="cover"
       />
       <View style={styles.textContainer}>
-      <Text style={styles.name}>{item.name}</Text>
-      <Text style={styles.description}>{item.description}</Text>
-      <Text style={styles.price}>${item.price}</Text>
+        <Text style={styles.name} numberOfLines={1} ellipsizeMode="tail">{item.name}</Text>
+        <Text style={styles.description} numberOfLines={2} ellipsizeMode="tail">{item.description}</Text>
+        <Text style={styles.price}>${item.price}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -69,7 +67,7 @@ const Products = ({ searchQuery }: { searchQuery: string }) => {
       numColumns={2}
       contentContainerStyle={styles.list}
       columnWrapperStyle={styles.row}
-      ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
+      ItemSeparatorComponent={() => <View style={{ height: 15 }} />}
     />
   );
 };
@@ -78,6 +76,7 @@ const styles = StyleSheet.create({
   list: {
     paddingHorizontal: cardMarginHorizontal / 2,
     paddingTop: 20,
+    paddingBottom: 30,
     backgroundColor: "#F5F5F5",
   },
   row: {
@@ -88,41 +87,43 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "#FFF",
     borderRadius: 15,
-    padding: 40,
-    width: cardWidth,
-    height: cardHeight,
-    marginBottom: 1,
+    padding: 12,
     shadowColor: "#000",
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 9,
-    flexGrow: 1,
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 5,
+    overflow: "hidden",
   },
   productImage: {
     width: "100%",
-    height: '55%',
-    marginBottom: 20,
-    marginTop: 1,
-    borderRadius: 8,
+    height: "60%",
+    borderRadius: 10,
+    backgroundColor: "#f9f9f9",
   },
   textContainer: {
     flex: 1,
+    paddingTop: 10,
+    paddingHorizontal: 5,
+    justifyContent: "space-between",
   },
   name: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: "bold",
-    color: "#8",
+    color: "#333",
+    marginBottom: 5,
   },
   description: {
     fontSize: 14,
-    color: "#888",
-    marginTop: 5,
+    color: "#777",
+    marginBottom: 8,
+    lineHeight: 18,
   },
   price: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#8",
-    marginTop: 5,
+    color: "#4CAF50",
+    marginTop: "auto",
   },
 });
 

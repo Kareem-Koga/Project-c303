@@ -302,6 +302,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: '#FFFFFF',
+    paddingTop: Platform.OS === 'android' ? 30 : 0,
   },
   container: {
     flex: 1,

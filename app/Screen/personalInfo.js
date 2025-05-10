@@ -213,7 +213,7 @@ const PersonalInfoScreen = () => {
         <Text style={styles.headerTitle}>Personal Information</Text>
         <Pressable 
           style={styles.editButton}
-          onPress={() => router.push('/(tabs)/editProfile')}
+          onPress={() => router.push('../Screen/editProfile')}
         >
           <MaterialIcons name="edit" size={20} color="#4CAF50" />
         </Pressable>
@@ -296,7 +296,7 @@ const PersonalInfoScreen = () => {
         <View style={styles.buttonContainer}>
           <Pressable 
             style={styles.editProfileButton}
-            onPress={() => router.push('/(tabs)/editProfile')}
+            onPress={() => router.push('../Screen/editProfile')}
           >
             <Text style={styles.editProfileText}>Edit Profile</Text>
           </Pressable>
@@ -310,6 +310,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: '#FFFFFF',
+    paddingTop: Platform.OS === 'android' ? 30 : 0,
   },
   loadingContainer: {
     flex: 1,
@@ -336,6 +337,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
+    marginTop: 5,
     borderBottomWidth: 1,
     borderBottomColor: '#F0F0F0',
     backgroundColor: '#FFFFFF',

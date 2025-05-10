@@ -7,6 +7,9 @@ import {
   TouchableOpacity,
   ScrollView,
   Dimensions,
+  StatusBar,
+  SafeAreaView,
+  Platform,
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import Products from "../../components/ProductItem";
@@ -35,109 +38,127 @@ const Home: React.FC = () => {
   );
 
   return (
-    <View style={styles.container}>
-      <View style={styles.searchContainer}>
-        <Text style={styles.storeTitle}>Elegance Store</Text>
+    <SafeAreaView style={styles.safeArea}>
+      <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+      <View style={styles.container}>
+        <View style={styles.searchContainer}>
+          <Text style={styles.storeTitle}>Elegance Store</Text>
 
-        <TextInput
-          style={styles.searchInput}
-          placeholder={`Search for ${username ?? ''}`}
-          value={searchQuery}
-          onChangeText={(text) => {
-            setSearchQuery(text);
-            setShowSuggestions(true);
-          }}
-          onFocus={() => setShowSuggestions(true)}
-          onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-          onSubmitEditing={() => setShowSuggestions(false)}
-          autoCapitalize="words"
-          placeholderTextColor="gray"
-        />
+          <TextInput
+            style={styles.searchInput}
+            placeholder={`Search for ${username ?? 'products'}`}
+            value={searchQuery}
+            onChangeText={(text) => {
+              setSearchQuery(text);
+              setShowSuggestions(text.length > 0);
+            }}
+            onFocus={() => setShowSuggestions(searchQuery.length > 0)}
+            onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+            onSubmitEditing={() => setShowSuggestions(false)}
+            autoCapitalize="none"
+            placeholderTextColor="gray"
+          />
+        </View>
+
+        {showSuggestions && filteredSuggestions.length > 0 && (
+          <ScrollView style={styles.dropdown}>
+            {filteredSuggestions.map((suggestion, index) => (
+              <TouchableOpacity
+                key={index}
+                style={styles.suggestionItem}
+                onPress={() => {
+                  setSearchQuery(suggestion);
+                  setShowSuggestions(false);
+                }}
+              >
+                <Text style={styles.suggestionText}>{suggestion}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        )}
+
+        <View style={styles.productsContainer}>
+          <Products searchQuery={searchQuery} />
+        </View>
       </View>
-
-      {showSuggestions && filteredSuggestions.length > 0 && (
-        <ScrollView style={styles.dropdown}>
-          {filteredSuggestions.map((suggestion, index) => (
-            <TouchableOpacity
-              key={index}
-              onPress={() => {
-                setSearchQuery(suggestion);
-                setShowSuggestions(false);
-              }}
-            >
-              <Text style={styles.suggestionText}>{suggestion}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      )}
-
-      <ScrollView style={styles.overlay}>
-        <Products searchQuery={searchQuery} />
-      </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#ffffff',
+    paddingTop: Platform.OS === 'android' ? 30 : 0,
+  },
   container: {
     flex: 1,
     backgroundColor: 'white',
-    justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingTop: 60,
   },
   searchContainer: {
-    width: '80%',
+    width: '90%',
     zIndex: 10,
+    paddingTop: 30,
+    paddingBottom: 10,
   },
   storeTitle: {
-    fontSize: 34,
+    fontSize: 32,
     fontWeight: 'bold',
     fontStyle: 'italic',
-    fontFamily: 'Dancing Script',
-    color: 'Black',
+    color: '#333',
     textAlign: 'center',
-    marginBottom: 10,
+    marginBottom: 16,
   },
   searchInput: {
-    backgroundColor: 'white',
-    padding: 10,
-    borderRadius: 10,
-    fontSize: 18,
+    backgroundColor: '#f5f5f5',
+    padding: 12,
+    borderRadius: 25,
+    fontSize: 16,
     textAlign: 'center',
-    color: 'black',
+    color: '#333',
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#e0e0e0',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
   },
   dropdown: {
-    marginTop: 10,
-    width: '80%',
+    marginTop: 5,
+    width: '90%',
     alignSelf: 'center',
     backgroundColor: '#fff',
     borderRadius: 10,
-    maxHeight: 150,
+    maxHeight: 200,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
     shadowRadius: 5,
     elevation: 5,
     zIndex: 20,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+  },
+  suggestionItem: {
+    borderBottomWidth: 0.5,
+    borderColor: '#eee',
   },
   suggestionText: {
     padding: 12,
     fontSize: 16,
     color: '#333',
-    borderBottomWidth: 0.5,
-    borderColor: '#ccc',
   },
-  overlay: {
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
-    padding: 20,
-    width: SCREEN_WIDTH,
-    borderRadius: 10,
+  productsContainer: {
     flex: 1,
-    marginTop: 20,
+    width: SCREEN_WIDTH,
+    marginTop: 10,
     zIndex: 1,
+    backgroundColor: '#f5f5f5',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    overflow: 'hidden',
   },
 });
 

@@ -307,7 +307,7 @@ const ProfileScreen = () => {
       {showEditButton ? (
         <Pressable
           style={styles.settingsEditButton}
-          onPress={handleEditProfile}
+          onPress={() => router.push("../Screen/editProfile")}
         >
           <Text style={styles.settingsEditText}>Edit</Text>
         </Pressable>
@@ -442,6 +442,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#F5F5F5",
+    paddingTop: Platform.OS === 'android' ? 30 : 0,
   },
   container: {
     flex: 1,
@@ -449,6 +450,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingBottom: 30,
+    paddingTop: 10,
   },
   tabletContentContainer: {
     paddingHorizontal: 40,
