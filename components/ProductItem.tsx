@@ -110,19 +110,19 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#333",
+    color: "#000000",
     marginBottom: 5,
   },
   description: {
     fontSize: 14,
-    color: "#777",
+    color: "#555555",
     marginBottom: 8,
     lineHeight: 18,
   },
   price: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#4CAF50",
+    color: "#000000",
     marginTop: "auto",
   },
 });

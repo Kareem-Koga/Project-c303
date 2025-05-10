@@ -203,7 +203,7 @@ const EditProfileScreen = () => {
         >
           <View style={styles.header}>
             <Pressable onPress={() => router.back()} style={styles.backButton}>
-              <MaterialIcons name="arrow-back" size={24} color="#4CAF50" />
+              <MaterialIcons name="arrow-back" size={24} color="#000000" />
             </Pressable>
             <Text style={styles.title}>Edit Profile</Text>
             <View style={{ width: 24 }} />
@@ -347,16 +347,16 @@ const styles = StyleSheet.create({
     borderRadius: 60,
     marginBottom: 12,
     borderWidth: 3,
-    borderColor: '#4CAF50',
+    borderColor: '#000000',
   },
   changePhotoButton: {
-    backgroundColor: '#F0F0F0',
+    backgroundColor: '#f0f0f0',
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 20,
   },
   changePhotoText: {
-    color: '#4CAF50',
+    color: '#000000',
     fontWeight: '600',
   },
   formContainer: {
@@ -397,7 +397,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   saveButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#000000',
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: 'center',

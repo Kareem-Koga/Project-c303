@@ -298,7 +298,7 @@ const ProfileScreen = () => {
       android_ripple={{ color: "#f0f0f0" }}
     >
       <View style={styles.settingsIconContainer}>
-        <Ionicons name={icon} size={24} color="#4CAF50" />
+        <Ionicons name={icon} size={24} color="#000000" />
       </View>
       <View style={styles.settingsTextContainer}>
         <Text style={styles.settingsTitle}>{title}</Text>
@@ -312,7 +312,7 @@ const ProfileScreen = () => {
           <Text style={styles.settingsEditText}>Edit</Text>
         </Pressable>
       ) : (
-        <MaterialIcons name="chevron-right" size={24} color="#888" />
+        <MaterialIcons name="chevron-right" size={24} color="#888888" />
       )}
     </Pressable>
   );
@@ -327,15 +327,23 @@ const ProfileScreen = () => {
 
   if (!userData) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.errorText}>Please log in to view your profile</Text>
-        <Pressable
-          style={styles.loginButton}
-          onPress={() => router.push("/(auth)/login")}
-        >
-          <Text style={styles.loginButtonText}>Login</Text>
-        </Pressable>
-      </View>
+      <SafeAreaView style={styles.safeArea}>
+        <View style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: "#F5F5F5",
+          paddingHorizontal: 20,
+        }}>
+          <Text style={styles.errorText}>Please log in to view your profile</Text>
+          <Pressable
+            style={styles.loginButton}
+            onPress={() => router.push("/(auth)/login")}
+          >
+            <Text style={styles.loginButtonText}>Login</Text>
+          </Pressable>
+        </View>
+      </SafeAreaView>
     );
   }
 
@@ -426,7 +434,7 @@ const ProfileScreen = () => {
         </View>
 
         <Pressable style={styles.logoutButton} onPress={handleLogout}>
-          <Ionicons name="log-out-outline" size={20} color="#FF3B30" />
+          <Ionicons name="log-out-outline" size={20} color="#000000" />
           <Text style={styles.logoutText}>Logout</Text>
         </Pressable>
 
@@ -494,13 +502,13 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 50,
     borderWidth: 3,
-    borderColor: "#4CAF50",
+    borderColor: "#000000",
   },
   editAvatarButton: {
     position: "absolute",
     bottom: 0,
     right: 0,
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#000000",
     borderRadius: 15,
     width: 30,
     height: 30,
@@ -555,7 +563,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "#F0F8F0",
+    backgroundColor: "#f0f0f0",
     justifyContent: "center",
     alignItems: "center",
     marginRight: 16,
@@ -580,7 +588,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   settingsEditText: {
-    color: "#4CAF50",
+    color: "#000000",
     fontWeight: "600",
   },
   logoutButton: {
@@ -599,7 +607,7 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   logoutText: {
-    color: "#FF3B30",
+    color: "#000000",
     fontSize: 16,
     fontWeight: "600",
     marginLeft: 8,
@@ -619,7 +627,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   loginButton: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#000000",
     paddingVertical: 12,
     paddingHorizontal: 30,
     borderRadius: 25,

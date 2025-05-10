@@ -81,12 +81,12 @@ const Login = () => {
     <View style={styles.container}>
       <Text style={styles.title}>Welcome Back</Text>
       <View style={styles.inputContainer}>
-        <MaterialIcons name="email" size={20} color="#4CAF50" style={styles.icon} />
+        <MaterialIcons name="email" size={20} color="#000000" style={styles.icon} />
         <TextInput
           style={styles.input}
           value={email}
           placeholder="Email"
-          placeholderTextColor="#888"
+          placeholderTextColor="#888888"
           onChangeText={(text) => setEmail(text)}
           keyboardType="email-address"
           autoCapitalize="none"
@@ -94,12 +94,12 @@ const Login = () => {
         />
       </View>
       <View style={styles.inputContainer}>
-        <MaterialIcons name="lock" size={20} color="#4CAF50" style={styles.icon} />
+        <MaterialIcons name="lock" size={20} color="#000000" style={styles.icon} />
         <TextInput
           style={styles.input}
           value={password}
           placeholder="Password"
-          placeholderTextColor="#888"
+          placeholderTextColor="#888888"
           secureTextEntry={true}
           onChangeText={(text) => setPassword(text)}
           testID="passwordInput"
@@ -111,7 +111,7 @@ const Login = () => {
         testID="loginButton"
       >
         {loading ? (
-          <ActivityIndicator size="small" color="white" />
+          <ActivityIndicator size="small" color="#FFFFFF" />
         ) : (
           <Text style={styles.submitText}>Login</Text>
         )}
@@ -140,18 +140,18 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#4CAF50",
+    color: "#000000",
     marginBottom: 20,
   },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: "#e0e0e0",
     borderRadius: 8,
     marginVertical: 10,
     width: "90%",
-    backgroundColor: "#FFF",
+    backgroundColor: "#FFFFFF",
     paddingHorizontal: 10,
     paddingVertical: 5,
   },
@@ -161,10 +161,10 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     height: 40,
-    color: "black",
+    color: "#000000",
   },
   submitButton: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#000000",
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 8,
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   submitText: {
-    color: "white",
+    color: "#FFFFFF",
     fontSize: 16,
     fontWeight: "bold",
   },
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   forgotPasswordText: {
-    color: "#4CAF50",
+    color: "#000000",
     fontSize: 14,
     fontWeight: "bold",
     textDecorationLine: "underline",
@@ -189,10 +189,10 @@ const styles = StyleSheet.create({
   signupText: {
     marginTop: 20,
     fontSize: 14,
-    color: "#888",
+    color: "#888888",
   },
   signupLink: {
-    color: "#4CAF50",
+    color: "#000000",
     fontWeight: "bold",
     marginTop: 5,
   },

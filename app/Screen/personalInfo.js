@@ -173,7 +173,7 @@ const PersonalInfoScreen = () => {
   const InfoItem = ({ icon, label, value }) => (
     <View style={styles.infoItem}>
       <View style={styles.infoIconContainer}>
-        <Ionicons name={icon} size={20} color="#4CAF50" />
+        <Ionicons name={icon} size={20} color="#000000" />
       </View>
       <View style={styles.infoTextContainer}>
         <Text style={styles.infoLabel}>{label}</Text>
@@ -208,14 +208,14 @@ const PersonalInfoScreen = () => {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.header}>
         <Pressable onPress={() => router.back()} style={styles.headerBackButton}>
-          <MaterialIcons name="arrow-back" size={24} color="#4CAF50" />
+          <MaterialIcons name="arrow-back" size={24} color="#000000" />
         </Pressable>
         <Text style={styles.headerTitle}>Personal Information</Text>
         <Pressable 
           style={styles.editButton}
           onPress={() => router.push('../Screen/editProfile')}
         >
-          <MaterialIcons name="edit" size={20} color="#4CAF50" />
+          <MaterialIcons name="edit" size={20} color="#000000" />
         </Pressable>
       </View>
 
@@ -373,7 +373,7 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: 40,
     borderWidth: 2,
-    borderColor: '#4CAF50',
+    borderColor: '#000000',
   },
   profileInfo: {
     marginLeft: 20,
@@ -448,7 +448,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   editProfileButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#000000',
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: 'center',
@@ -467,7 +467,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   backButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#000000',
     paddingVertical: 12,
     paddingHorizontal: 30,
     borderRadius: 8,

@@ -92,58 +92,58 @@ const Signup = () => {
     <View style={styles.container}>
       {loading ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#4CAF50" />
+          <ActivityIndicator size="large" color="#000000" />
           <Text style={styles.loadingText}>Please wait...</Text>
         </View>
       ) : (
         <>
           <Text style={styles.title}>Create an Account</Text>
           <View style={styles.inputContainer}>
-            <AntDesign name="user" style={styles.icon} size={24} color="#4CAF50" />
+            <AntDesign name="user" style={styles.icon} size={24} color="#000000" />
             <TextInput
               style={styles.input}
               placeholder="Username"
-              placeholderTextColor="#888"
+              placeholderTextColor="#888888"
               onChangeText={handleInputChange(setUsername)}
             />
           </View>
           <View style={styles.inputContainer}>
-            <MaterialIcons name="lock" size={20} color="#4CAF50" style={styles.icon} />
+            <MaterialIcons name="lock" size={20} color="#000000" style={styles.icon} />
             <TextInput
               style={styles.input}
               value={password}
               placeholder="Password"
-              placeholderTextColor="#888"
+              placeholderTextColor="#888888"
               secureTextEntry={true}
               onChangeText={handleInputChange(setPassword)}
             />
           </View>
           <View style={styles.inputContainer}>
-            <MaterialIcons name="lock" size={20} color="#4CAF50" style={styles.icon} />
+            <MaterialIcons name="lock" size={20} color="#000000" style={styles.icon} />
             <TextInput
               style={styles.input}
               placeholder="Confirm Password"
-              placeholderTextColor="#888"
+              placeholderTextColor="#888888"
               secureTextEntry={true}
               onChangeText={handleInputChange(setConfirmPassword)}
             />
           </View>
           <View style={styles.inputContainer}>
-            <MaterialIcons name="email" size={20} color="#4CAF50" style={styles.icon} />
+            <MaterialIcons name="email" size={20} color="#000000" style={styles.icon} />
             <TextInput
               style={styles.input}
               value={email}
               placeholder="Email"
-              placeholderTextColor="#888"
+              placeholderTextColor="#888888"
               onChangeText={handleInputChange(setEmail)}
             />
           </View>
           <View style={styles.inputContainer}>
-            <AntDesign name="phone" style={styles.icon} size={24} color="#4CAF50" />
+            <AntDesign name="phone" style={styles.icon} size={24} color="#000000" />
             <TextInput
               style={styles.input}
               placeholder="Phone"
-              placeholderTextColor="#888"
+              placeholderTextColor="#888888"
               onChangeText={handleInputChange(setPhone)}
             />
           </View>
@@ -168,18 +168,18 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#4CAF50",
+    color: "#000000",
     marginBottom: 20,
   },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: "#e0e0e0",
     borderRadius: 8,
     marginVertical: 10,
     width: "90%",
-    backgroundColor: "#FFF",
+    backgroundColor: "#FFFFFF",
     paddingHorizontal: 10,
     paddingVertical: 5,
   },
@@ -189,10 +189,10 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     height: 40,
-    color: "black",
+    color: "#000000",
   },
   submitButton: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#000000",
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 8,
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   submitText: {
-    color: "white",
+    color: "#FFFFFF",
     fontSize: 16,
     fontWeight: "bold",
   },
@@ -212,10 +212,10 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 10,
     fontSize: 16,
-    color: "#4CAF50",
+    color: "#000000",
   },
   errorText: {
-    color: "red",
+    color: "#FF0000",
     marginTop: 10,
     textAlign: "center",
   },
