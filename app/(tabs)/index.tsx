@@ -13,6 +13,9 @@ import {
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import Products from "../../components/ProductItem";
+import { Ionicons } from '@expo/vector-icons';
+
+
 
 const defaultProducts = [
   'jeans', 'جينز',
@@ -42,8 +45,16 @@ const Home: React.FC = () => {
       <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
       <View style={styles.container}>
         <View style={styles.searchContainer}>
-          <Text style={styles.storeTitle}>Elegance Store</Text>
-
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Text style={styles.storeTitle}>Elegance Store</Text>
+            <TouchableOpacity
+              style={styles.cartButtonTop}
+              onPress={() => router.push('/cart')}
+              accessibilityLabel="Review Cart"
+            >
+              <Ionicons name="cart-outline" size={28} color="#333" />
+            </TouchableOpacity>
+          </View>
           <TextInput
             style={styles.searchInput}
             placeholder={`Search for ${username ?? 'products'}`}
@@ -159,6 +170,16 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     overflow: 'hidden',
+  },
+  cartButtonTop: {
+    marginLeft: 10,
+    padding: 6,
+    borderRadius: 20,
+    backgroundColor: '#f5f5f5',
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

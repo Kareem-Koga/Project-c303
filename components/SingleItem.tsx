@@ -1,10 +1,10 @@
 // app/product.tsx
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Alert, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, addDoc, query, where, onSnapshot } from 'firebase/firestore';
 import { Firebase_db as db } from '../FirebaseConfig'; // Import Firestore
 
 interface Product {
@@ -25,6 +25,11 @@ const ProductScreen: React.FC = () => {
   const { id } = useLocalSearchParams(); // Get the product ID from the route
   const [product, setProduct] = useState<Product | null>(null);
   const [selectedSize, setSelectedSize] = useState('S');
+  const [reviews, setReviews] = useState<any[]>([]);
+  const [reviewName, setReviewName] = useState('');
+  const [reviewRating, setReviewRating] = useState(0);
+  const [reviewComment, setReviewComment] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -50,6 +55,16 @@ const ProductScreen: React.FC = () => {
     };
 
     fetchProduct();
+  }, [id]);
+
+  useEffect(() => {
+    if (!id) return;
+    // Listen for reviews for this product
+    const q = query(collection(db, 'reviews'), where('productId', '==', id));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      setReviews(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    });
+    return () => unsubscribe();
   }, [id]);
 
   if (!product) {
@@ -92,6 +107,30 @@ const ProductScreen: React.FC = () => {
     }
   };
 
+  const handleSubmitReview = async () => {
+    if (!reviewName || !reviewRating || !reviewComment) {
+      Alert.alert('Error', 'Please fill all review fields');
+      return;
+    }
+    setSubmitting(true);
+    try {
+      await addDoc(collection(db, 'reviews'), {
+        productId: id,
+        name: reviewName,
+        rating: reviewRating,
+        comment: reviewComment,
+        createdAt: new Date(),
+      });
+      setReviewName('');
+      setReviewRating(0);
+      setReviewComment('');
+      Alert.alert('Success', 'Review submitted!');
+    } catch (error) {
+      Alert.alert('Error', 'Failed to submit review');
+    }
+    setSubmitting(false);
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* Header */}
@@ -120,6 +159,57 @@ const ProductScreen: React.FC = () => {
         {/* Product Description */}
         <Text style={styles.detailsTitle}>Product Details</Text>
         <Text style={styles.description}>{product.description}</Text>
+
+        {/* Review Section (moved here) */}
+        <View style={styles.reviewSection}>
+          <Text style={styles.detailsTitle}>Reviews</Text>
+          {reviews.length === 0 ? (
+            <Text style={{ color: '#888', marginBottom: 10 }}>No reviews yet.</Text>
+          ) : (
+            reviews.map((rev) => (
+              <View key={rev.id} style={styles.reviewItem}>
+                <Text style={styles.reviewName}>{rev.name} <Text style={styles.reviewRating}>({rev.rating}/5)</Text></Text>
+                <Text style={styles.reviewComment}>{rev.comment}</Text>
+              </View>
+            ))
+          )}
+          <Text style={[styles.detailsTitle, { marginTop: 20 }]}>Add a Review</Text>
+          <View style={styles.reviewForm}>
+            <TextInput
+              style={styles.input}
+              placeholder="Your Name"
+              value={reviewName}
+              onChangeText={setReviewName}
+            />
+            {/* Star Rating Row */}
+            <View style={styles.starRow}>
+              {[1,2,3,4,5].map((star) => (
+                <TouchableOpacity key={star} onPress={() => setReviewRating(star)}>
+                  <Ionicons
+                    name={star <= reviewRating ? 'star' : 'star-outline'}
+                    size={28}
+                    color={star <= reviewRating ? '#f5a623' : '#ccc'}
+                    style={{ marginHorizontal: 2 }}
+                  />
+                </TouchableOpacity>
+              ))}
+            </View>
+            <TextInput
+              style={[styles.input, { height: 60 }]}
+              placeholder="Comment"
+              value={reviewComment}
+              onChangeText={setReviewComment}
+              multiline
+            />
+            <TouchableOpacity
+              style={[styles.cartButton, { marginTop: 10, backgroundColor: submitting ? '#888' : 'black' }]}
+              onPress={handleSubmitReview}
+              disabled={submitting}
+            >
+              <Text style={styles.cartButtonText}>{submitting ? 'Submitting...' : 'Submit Review'}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
 
         {/* Sizes */}
         <View style={styles.sizeContainer}>
@@ -253,6 +343,54 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     marginLeft: 8,
+  },
+  reviewSection: {
+    marginTop: 30,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 30,
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 2,
+  },
+  reviewItem: {
+    marginBottom: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+    paddingBottom: 8,
+  },
+  reviewName: {
+    fontWeight: 'bold',
+    fontSize: 15,
+  },
+  reviewRating: {
+    color: '#f5a623',
+    fontWeight: 'bold',
+  },
+  reviewComment: {
+    fontSize: 14,
+    color: '#444',
+    marginTop: 2,
+  },
+  reviewForm: {
+    marginTop: 10,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 10,
+    backgroundColor: '#fafafa',
+    fontSize: 14,
+  },
+  starRow: {
+    flexDirection: 'row',
+    marginBottom: 10,
+    alignItems: 'center',
   },
 });
 
