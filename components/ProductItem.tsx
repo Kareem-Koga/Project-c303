@@ -4,9 +4,13 @@ import { useRouter } from "expo-router";
 import { collection, getDocs } from "firebase/firestore";
 import { Firebase_db as db } from "../FirebaseConfig";
 
-const { width } = Dimensions.get("window");
-const cardWidth = width / 2 - 20;
-const cardHeight = cardWidth * 1.5;
+const { width: screenWidth } = Dimensions.get('window');
+const estimatedCardWidth = 180;
+const numColumns = 2;
+const cardMarginHorizontal = 10;
+const cardWidth = (screenWidth - (cardMarginHorizontal * 2) - (10 * (numColumns - 1))) / numColumns;
+const cardHeight = cardWidth * 1.6;
+
 
 const ProductItem = ({ item }: { item: { id: string; name: string; description: string; price: string; image: string } }) => {
   const router = useRouter();
@@ -72,7 +76,7 @@ const Products = ({ searchQuery }: { searchQuery: string }) => {
 
 const styles = StyleSheet.create({
   list: {
-    paddingHorizontal: 10,
+    paddingHorizontal: cardMarginHorizontal / 2,
     paddingTop: 20,
     backgroundColor: "#F5F5F5",
   },
@@ -83,20 +87,22 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: "#FFF",
-    borderRadius: 8,
-    padding: 19,
+    borderRadius: 15,
+    padding: 40,
     width: cardWidth,
     height: cardHeight,
-    marginBottom: 15,
+    marginBottom: 1,
     shadowColor: "#000",
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.3,
     shadowRadius: 5,
-    elevation: 3,
+    elevation: 9,
+    flexGrow: 1,
   },
   productImage: {
     width: "100%",
-    height: 150,
-    marginBottom: 10,
+    height: '55%',
+    marginBottom: 20,
+    marginTop: 1,
     borderRadius: 8,
   },
   textContainer: {
@@ -105,7 +111,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#4CAF50",
+    color: "#8",
   },
   description: {
     fontSize: 14,
@@ -115,7 +121,7 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#007BFF",
+    color: "#8",
     marginTop: 5,
   },
 });
